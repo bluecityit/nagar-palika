@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=palika_secure_pass
+      - DB_NAME=ajmer_municipal
+    depends_on:
+      - db
+
+  db:
+    build: ./database
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=palika_secure_pass
+      - MYSQL_DATABASE=ajmer_municipal
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
